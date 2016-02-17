@@ -16,40 +16,20 @@ void ofApp::setup(){
         images.push_back(ofImage("wallpaper.jpg"));
     
     //to use with time
-//    beginImageTime = ofGetElapsedTimef();  // get the start time
-//    nextImageTime = 3; // in seconds
-//    fadeTime = 0.7;
+    beginImageTime = ofGetElapsedTimef();  // get the start time
+    nextImageTime = 5; // in seconds
+    fadeTime = 1;
     
     //use frames
-    framesCounter = 0;
-    imageDuration = 3; //in seconds, later to fps.
-    imageDuration *= ofGetFrameRate();
-    fadeDuration = 0.7 * ofGetFrameRate();
+    //framesCounter = 0;
+    //imageDuration = 3; //in seconds, later to fps.
+    //imageDuration *= ofGetFrameRate();
+    //fadeDuration = 0.7 * ofGetFrameRate();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-//    if(ofGetElapsedTimef()-beginImageTime > nextImageTime){
-//        currentImage++;
-//        currentImage %= dir.size();
-//        cout<<currentImage<<endl;
-//        beginImageTime = ofGetElapsedTimef();
-//    }
-//    if(!hasMedia){
-//        if(checkDirectory()){
-//            loadImages();
-//            hasMedia=true;
-//            framesCounter=0;
-//            currentImage=0;
-//            nextImage = currentImage+1;
-//            nextImage %= imagePaths.size();
-//            images.push_back(ofImage(imagePaths[currentImage]));
-//            images.push_back(ofImage(imagePaths[nextImage]));
-//        }
-//    }
-    
-    framesCounter++;
-    if (framesCounter >= imageDuration){
+    if(ofGetElapsedTimef()-beginImageTime > nextImageTime){
         if(!checkDirectory() && hasMedia){
             hasMedia=false;
             images.clear();
@@ -71,8 +51,34 @@ void ofApp::update(){
             images.push_back(ofImage(imagePaths[currentImage]));
             images.push_back(ofImage(imagePaths[nextImage]));
         }
-        framesCounter = 0;
+        beginImageTime = ofGetElapsedTimef();
     }
+    
+//    framesCounter++;
+//    if (framesCounter >= imageDuration){
+//        if(!checkDirectory() && hasMedia){
+//            hasMedia=false;
+//            images.clear();
+//            images.push_back(ofImage("wallpaper.jpg"));
+//        }else if(hasMedia){
+//            currentImage++;
+//            currentImage %= imagePaths.size();
+//            nextImage = currentImage+1;
+//            nextImage %= imagePaths.size();
+//            images.pop_front();
+//            images.push_back(ofImage(imagePaths[nextImage]));
+//        }else if(checkDirectory()){
+//            loadImages();
+//            hasMedia=true;
+//            currentImage=0;
+//            nextImage = currentImage+1;
+//            nextImage %= imagePaths.size();
+//            images.clear();
+//            images.push_back(ofImage(imagePaths[currentImage]));
+//            images.push_back(ofImage(imagePaths[nextImage]));
+//        }
+//        framesCounter = 0;
+//    }
 }
 
 //--------------------------------------------------------------
@@ -80,11 +86,11 @@ void ofApp::draw(){
     if(hasMedia){
         ofHideCursor();
         int alphaValue = 255;
-        //    if(ofGetElapsedTimef()-beginImageTime > nextImageTime-(fadeTime)){
-        //        alphaValue = 255 - ((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime)*255;  //(ofGetElapsedTimef()-beginImageTime) * 255;
-        //    }
-        if(framesCounter > imageDuration-fadeDuration)
-            alphaValue = 255 - float(framesCounter-(imageDuration-fadeDuration))/float(fadeDuration)*255;
+            if(ofGetElapsedTimef()-beginImageTime > nextImageTime-(fadeTime))
+                alphaValue = 255 - ((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime)*255;
+        
+        //if(framesCounter > imageDuration-fadeDuration)
+        //    alphaValue = 255 - float(framesCounter-(imageDuration-fadeDuration))/float(fadeDuration)*255;
         
         //draw current image
         drawImage(0, alphaValue);
