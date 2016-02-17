@@ -11,7 +11,7 @@ void ofApp::setup(){
     beginImageTime = ofGetElapsedTimef();  // get the start time
     nextImageTime = 3; // in seconds
     
-    fadeTime = 0.5;
+    fadeTime = 0.7;
 }
 
 //--------------------------------------------------------------
@@ -25,10 +25,10 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofHideCursor();
     int alphaValue = 255;
     if(ofGetElapsedTimef()-beginImageTime > nextImageTime-(fadeTime)){
         alphaValue = 255 - ((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime/2)*255;  //(ofGetElapsedTimef()-beginImageTime) * 255;
-        cout<<((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime)<<endl;
     }
     
     //draw current image
@@ -60,7 +60,8 @@ bool ofApp::loadImages(){
     
     // you can now iterate through the files and load them into the ofImage vector
     for(int i = 0; i < (int)dir.size(); i++){
-        images[i].load(dir.getPath(i));
+        bool result = images[i].load(dir.getPath(i));
+        cout<<dir.getPath(i) << "  " << result<<endl;
     }
     return true;
 }
