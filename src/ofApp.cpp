@@ -7,6 +7,10 @@ void ofApp::setup(){
     //load images to vector;
     loadImages();
     currentImage=0;
+    nextImage = currentImage+1;
+    nextImage %= imagePaths.size();
+    images.push_back(ofImage(imagePaths[currentImage]));
+    images.push_back(ofImage(imagePaths[nextImage]));
     
     //to use with time
 //    beginImageTime = ofGetElapsedTimef();  // get the start time
@@ -31,9 +35,12 @@ void ofApp::update(){
     framesCounter++;
     if (framesCounter >= imageDuration){
         currentImage++;
-        currentImage %= dir.size();
-        cout<<currentImage<<endl;
+        currentImage %= imagePaths.size();
+        nextImage = currentImage+1;
+        nextImage %= imagePaths.size();
         framesCounter = 0;
+        images.pop_front();
+        images.push_back(ofImage(imagePaths[nextImage]));
     }
 }
 
@@ -48,13 +55,11 @@ void ofApp::draw(){
         alphaValue = 255 - float(framesCounter-(imageDuration-fadeDuration))/float(fadeDuration)*255;
     
     //draw current image
-    drawImage(currentImage, alphaValue);
+    drawImage(0, alphaValue);
     
     //draw next image
     if(alphaValue != 255){
-        int nextImage = currentImage+1;
-        nextImage %= dir.size();
-        drawImage(nextImage, (255-alphaValue));
+        drawImage(1, (255-alphaValue));
     }
 }
 
@@ -69,15 +74,9 @@ bool ofApp::loadImages(){
         
     dir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
     
-    //allocate the vector to have as many ofImages as files
-    if( dir.size() ){
-        images.assign(dir.size(), ofImage());
-    }
-    
     // you can now iterate through the files and load them into the ofImage vector
     for(int i = 0; i < (int)dir.size(); i++){
-        bool result = images[i].load(dir.getPath(i));
-        cout<<dir.getPath(i) << "  " << result<<endl;
+        imagePaths.push_back(dir.getPath(i));
     }
     return true;
 }

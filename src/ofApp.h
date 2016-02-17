@@ -25,9 +25,10 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
     ofDirectory dir;
-    vector<ofImage> images;
+    deque<ofImage> images;
+    vector<string> imagePaths;
     
-    int currentImage;
+    int currentImage, nextImage;
     
     
     float beginImageTime; // store when we start time timer
