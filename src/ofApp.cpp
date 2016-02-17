@@ -10,6 +10,8 @@ void ofApp::setup(){
     
     beginImageTime = ofGetElapsedTimef();  // get the start time
     nextImageTime = 1; // in seconds
+    
+    fadeTime = 1;
 }
 
 //--------------------------------------------------------------
@@ -23,8 +25,21 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetColor(ofColor::white);
+    
+    int alphaValue = (ofGetElapsedTimef()-beginImageTime) * 255;
+    
+    //draw current image
+    ofPushStyle();
+    ofSetColor(255, 255, 255, 255-alphaValue);
     images[currentImage].draw(0,0);
+    ofPopStyle();
+    
+    //draw next image
+    ofPushStyle();
+    ofSetColor(255, 255, 255, alphaValue);
+    int nextImage = currentImage+1;
+    nextImage %= dir.size();
+    images[nextImage].draw(0,0);
 }
 
 bool ofApp::loadImages(){
