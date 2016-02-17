@@ -8,18 +8,32 @@ void ofApp::setup(){
     loadImages();
     currentImage=0;
     
-    beginImageTime = ofGetElapsedTimef();  // get the start time
-    nextImageTime = 3; // in seconds
+    //to use with time
+//    beginImageTime = ofGetElapsedTimef();  // get the start time
+//    nextImageTime = 3; // in seconds
+//    fadeTime = 0.7;
     
-    fadeTime = 0.7;
+    //use frames
+    framesCounter = 0;
+    imageDuration = 3; //in seconds, later to fps.
+    imageDuration *= ofGetFrameRate();
+    fadeDuration = 0.7 * ofGetFrameRate();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if(ofGetElapsedTimef()-beginImageTime > nextImageTime){
+//    if(ofGetElapsedTimef()-beginImageTime > nextImageTime){
+//        currentImage++;
+//        currentImage %= dir.size();
+//        cout<<currentImage<<endl;
+//        beginImageTime = ofGetElapsedTimef();
+//    }
+    framesCounter++;
+    if (framesCounter >= imageDuration){
         currentImage++;
         currentImage %= dir.size();
-        beginImageTime = ofGetElapsedTimef();
+        cout<<currentImage<<endl;
+        framesCounter = 0;
     }
 }
 
@@ -27,9 +41,11 @@ void ofApp::update(){
 void ofApp::draw(){
     ofHideCursor();
     int alphaValue = 255;
-    if(ofGetElapsedTimef()-beginImageTime > nextImageTime-(fadeTime)){
-        alphaValue = 255 - ((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime/2)*255;  //(ofGetElapsedTimef()-beginImageTime) * 255;
-    }
+//    if(ofGetElapsedTimef()-beginImageTime > nextImageTime-(fadeTime)){
+//        alphaValue = 255 - ((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime)*255;  //(ofGetElapsedTimef()-beginImageTime) * 255;
+//    }
+    if(framesCounter > imageDuration-fadeDuration)
+        alphaValue = 255 - float(framesCounter-(imageDuration-fadeDuration))/float(fadeDuration)*255;
     
     //draw current image
     drawImage(currentImage, alphaValue);

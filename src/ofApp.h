@@ -34,4 +34,10 @@ class ofApp : public ofBaseApp{
     float nextImageTime; // when do want to stop the timer
     
     float fadeTime;
+    
+    int framesCounter;
+    int imageDuration;
+    
+    int fadeDuration;
+    
 };
