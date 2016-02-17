@@ -10,6 +10,7 @@ class ofApp : public ofBaseApp{
 		void draw();
     
     bool loadImages();
+    void drawImage(int index, int alpha);
 
 		void keyPressed(int key);
 		void keyReleased(int key);

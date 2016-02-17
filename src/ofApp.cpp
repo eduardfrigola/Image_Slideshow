@@ -9,9 +9,9 @@ void ofApp::setup(){
     currentImage=0;
     
     beginImageTime = ofGetElapsedTimef();  // get the start time
-    nextImageTime = 1; // in seconds
+    nextImageTime = 3; // in seconds
     
-    fadeTime = 1;
+    fadeTime = 0.5;
 }
 
 //--------------------------------------------------------------
@@ -25,21 +25,21 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    
-    int alphaValue = (ofGetElapsedTimef()-beginImageTime) * 255;
+    int alphaValue = 255;
+    if(ofGetElapsedTimef()-beginImageTime > nextImageTime-(fadeTime)){
+        alphaValue = 255 - ((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime/2)*255;  //(ofGetElapsedTimef()-beginImageTime) * 255;
+        cout<<((ofGetElapsedTimef()-beginImageTime)-(nextImageTime-(fadeTime)))/(fadeTime)<<endl;
+    }
     
     //draw current image
-    ofPushStyle();
-    ofSetColor(255, 255, 255, 255-alphaValue);
-    images[currentImage].draw(0,0);
-    ofPopStyle();
+    drawImage(currentImage, alphaValue);
     
     //draw next image
-    ofPushStyle();
-    ofSetColor(255, 255, 255, alphaValue);
-    int nextImage = currentImage+1;
-    nextImage %= dir.size();
-    images[nextImage].draw(0,0);
+    if(alphaValue != 255){
+        int nextImage = currentImage+1;
+        nextImage %= dir.size();
+        drawImage(nextImage, (255-alphaValue));
+    }
 }
 
 bool ofApp::loadImages(){
@@ -63,6 +63,13 @@ bool ofApp::loadImages(){
         images[i].load(dir.getPath(i));
     }
     return true;
+}
+
+void ofApp::drawImage(int index, int alpha){
+    ofPushStyle();
+    ofSetColor(255, 255, 255, alpha);
+    images[index].draw(0,0);
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------
