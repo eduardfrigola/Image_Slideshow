@@ -12,7 +12,8 @@ void ofApp::setup(){
         nextImage %= imagePaths.size();
         images.push_back(ofImage(imagePaths[currentImage]));
         images.push_back(ofImage(imagePaths[nextImage]));
-    }
+    }else
+        images.push_back(ofImage("wallpaper.jpg"));
     
     //to use with time
 //    beginImageTime = ofGetElapsedTimef();  // get the start time
@@ -49,12 +50,11 @@ void ofApp::update(){
     
     framesCounter++;
     if (framesCounter >= imageDuration){
-        if(!checkDirectory()){
+        if(!checkDirectory() && hasMedia){
             hasMedia=false;
             images.clear();
             images.push_back(ofImage("wallpaper.jpg"));
-        }
-        if(hasMedia){
+        }else if(hasMedia){
             currentImage++;
             currentImage %= imagePaths.size();
             nextImage = currentImage+1;
@@ -93,7 +93,7 @@ void ofApp::draw(){
         if(alphaValue != 255){
             drawImage(1, (255-alphaValue));
         }
-    }else
+    }else if(images.size() != 0)
         drawImage(0, 255);
 }
 
@@ -118,8 +118,12 @@ bool ofApp::loadImages(){
 //--------------------------------------------------------------
 bool ofApp::checkDirectory(){
 #if defined(TARGET_OSX)
+    if(dir.isDirectoryEmpty("/Volumes/USB"))
+        return false;
     dir.listDir("/Volumes/USB");
 #else
+    if(dir.isDirectoryEmpty("/media/usb"))
+        return false;
     dir.listDir("/media/usb");
 #endif
     return (dir.size() != 0);
@@ -134,8 +138,7 @@ void ofApp::drawImage(int index, int alpha){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    currentImage++;
-    currentImage %= dir.size();
+    
 }
 
 //--------------------------------------------------------------
