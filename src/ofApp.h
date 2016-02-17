@@ -10,6 +10,7 @@ class ofApp : public ofBaseApp{
 		void draw();
     
     bool loadImages();
+    bool checkDirectory();
     void drawImage(int index, int alpha);
 
 		void keyPressed(int key);
@@ -29,7 +30,7 @@ class ofApp : public ofBaseApp{
     vector<string> imagePaths;
     
     int currentImage, nextImage;
-    
+    bool hasMedia;
     
     float beginImageTime; // store when we start time timer
     float nextImageTime; // when do want to stop the timer
