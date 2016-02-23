@@ -17,7 +17,7 @@ void ofApp::setup(){
     
     //to use with time
     beginImageTime = ofGetElapsedTimef();  // get the start time
-    nextImageTime = 5; // in seconds
+    nextImageTime = 10; // in seconds
     fadeTime = 1;
     
     //use frames
